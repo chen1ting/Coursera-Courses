@@ -1,0 +1,136 @@
+Welcome back In the previous task, we define a function, uh,
+to convert individual rose in our data to input examples
+which were then downstream converted to features
+in the format that Burt requires, namely, uh, the feature
+input IEDs, their input masks, they're segment ideas, A ZX
+well, as their labels.
+Now, what we need to do is apply this function to our
+TensorFlow TF data set.
+And to do that, we need to use the data set dot map, uh,
+function to apply this to underscore feature function to our
+data. But the problem that we encounter when applying the map
+function is that, uh, data set dot map runs in graph mode
+and it returns graph tensor is which do not have a value.
+So in graph mode, you can Onley use TensorFlow ops
+and functions.
+So what we need to do is define a wrapper function on All
+it does is, um instead of graft answers, it will pass regular
+tensor to the rapt function and the rap function being this
+one. So it will take the graph tensor ZX.
+Make sure that their regular tensor is with, uh dot camp I
+value. All right, so Basically, what we're doing is, um,
+creating a function rapper, right?
+So eventually, we just want these four things which are
+the input IEDs and put mass segment IEDs and labels.
+So they're going to be, uh, returned here for us.
+So we have input IEDs, We have input.
+Underscore mosque.
+We have segment underscore IEDs, and we have label underscore
+i D. So this is what our, uh, to underscore feature function
+returns correct.
+So I hope we're on the same page so far.
+And so the only confusing bit is this is this but creating
+a wrapper function.
+So we're taking ah python function and then converting it
+into a TensorFlow up.
+And the function that we're wrapping around is this
+to underscore feature function, and we need to specify that
+the input is going to be the text com a label and ah,
+the tensor output type is specified like this.
+So I'm going to do this on the next line so t out equals
+our input.
+IEDs are in 30 TEUs.
+Our input mass are in 32 segment IEDs are in 32 data types,
+and our label IEDs are also the same.
+And so there in 32 tensor tze So a t f dot i n t 32 and we
+basically just copy and paste us three more times.
+There we go and put I'd input mass segment I'd and label idea.
+So all these air the tensor is corresponding, uh, to the ones
+returned by the function All right, so we just convert
+the graph tensor to regular tensor pass it to our function
+and make sure that the values returned are in 32 tensor tze
+But the issue is that this function rapper doesn't set
+the shape of the return tensor.
+So remember that we need the shape of all these tensor xcx
+except for the label tensor, um, to be to the max sequence
+length and I don't know, I just keep getting disconnected, so
+I don't mind me.
+Eso What we need to do is set the shape of all these tensor
+xcx because the rapper doesn't do that for us.
+So input IEDs and we can use the set underscore shape,
+function and set the shape to be the pre defined Max Sequent
+length and we and we do this for the input mosques
+and the segment ideas as well.
+Uh, sat underscore shape is Max underscore sequence length,
+and I'll just copy this bit over here.
+And we do this for segment ideas as well.
+There we go.
+And label idea.
+We can just leave it empty.
+Since the labels aren't constrained to be in a specific shape,
+we can do it task agnostic or the number of label agnostic.
+So this can be, uh, binary classification.
+With two labels, it can be multi class classification
+with an arbitrary number of labels.
+So we don't really know the shape, and we could just set it
+to be blank.
+All right.
+And remember that the data set, uh, TensorFlow data set that
+we created above that will, uh, give us as the first entry
+the raw text.
+And the second entry is going to be the label.
+And what we've done now is using the two feature function
+from task six.
+We have mapped this raw string into, uh, these three things,
+the input IEDs.
+So we have converted them to input IEDs.
+We've created input masks for them and their type IEDs
+or segment IEDs.
+And what we need to do now is just bundle these
+three features into, um, let's see, one dictionary for X
+and R Y value is just going to be the label I'd write.
+So let's do that here.
+So let's create, uh, our features are input features.
+This is just gonna be a dictionary where the keys air.
+Just going to be the names.
+So input word underscore I d. S.
+This is just input.
+I'd next We have input mosque.
+So this is what a bird accepts, right?
+These strings where the value of this is input underscore
+mosque.
+And finally, we have input type IEDs.
+Great. And all we need to do now is return X as well
+as the label idea.
+So that, uh, will be one single example.
+And when we apply the data set, uh, map function, uh,
+and apply to feature map.
+This will take each one of our examples from our TensorFlow
+data set and convert each one of those examples to, uh,
+this format of input IEDs, input mass segment IEDs and then
+set their shape to the Max Sequent length and finally return
+all of these three things bundled together in a dictionary X
+as well as the label idea.
+So that's gonna be our, uh, input data set that we're going
+to feed into our birth model.
+So let's go ahead and return X as well as the label
+underscore idea.
+And hopefully we haven't made any, uh, typos or spelling
+mistakes as so far.
+And that's about it for this task.
+Fantastic work.
+And we just have one last step before we can start finding
+fine tuning our model, which is to create a new input
+pipeline with TF dot data.
+And so if if you're thinking Wait, didn't we already do that?
+Well, partially.
+So we have all the parts that we need, and all we need
+to do is glue them together.
+So we've created are TensorFlow data set right.
+And we've created this function that maps the raw text into,
+uh, the features this format that Bert requires.
+All we need to do is convert our data set and map it
+to this function.
+So we have the function, we have our data set.
+We just need to do this mapping together.
+So let's do that in the next task.

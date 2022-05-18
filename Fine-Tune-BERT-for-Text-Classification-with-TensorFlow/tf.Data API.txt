@@ -1,0 +1,235 @@
+Welcome back.
+In the last task, we downloaded and loaded our data set
+into a pandas data frame.
+And we also looked at the target distribution and observed
+that we clearly have a class and balance issue.
+So what we can do now is to create our training
+and validation splits.
+And we can do this now to avoid any data each data leakage
+issues, um, that we might encounter earlier and to avoid
+training and tests Que All right, So let's go ahead and use
+psych. It learns trained test split helper function to go
+ahead and split our data set.
+And you can already see that in the code cell
+from the previous task have already imported the train
+to split helper function for you.
+Right? So all we have to do now is invoked that function
+on our original data frame.
+The only question is, what fraction do we keep for training
+and validation?
+Well, I've already done ah, bit of calculating, and I'll just
+explain it to you in a bit, so let's type this out.
+So our, uh, training data frame, let's call it train DF
+and whatever is left over can be stored in remaining, all
+right. And we're going to use the train test split helper
+function.
+Um, and we are splitting the DF data frame and so that both
+both you and I have the same result.
+Let's set the random state Ah, to 42.
+And now comes, uh, at the important part.
+So I'm setting the training size to something that will take
+us around 5 to 6 minutes of training time on a standard
+collab GPU just so that we don't unnecessarily extend
+the duration of this project.
+So the idea is that, er, once you have completed this project,
+since you already have access, uh, to the notebook
+and since you've filled out the code, you can come back once
+you've completed it and increase the size of the data set
+or any other parameters in this notebook and play
+around with it.
+So for now, I'm going to be using just 0.75% of wth e entire
+train dot CSP file, which is basically our data frame.
+So that translates to 0.75 here.
+And remember, we noticed that there was a class imbalance
+problem and we are making the assumption that this, uh,
+distribution is also reflected in the real world.
+So what we want to do is stratified sampling.
+So we want to stratify based on the values in the target
+column.
+And by the way, this is stratify not start.
+If I All right, Yeah, that looks like the correct spelling.
+And we're stratify ing based on, um, their target column
+values.
+All right, so that will create our train DF.
+And now what we're going to do is create our validation data
+frame using by splitting the remaining, uh, DF.
+So we call are trained to split function once again,
+but this time on the remaining.
+And we can set the same values for random state.
+I'm going to set it to be 42 next, my train size or valid
+size in this case.
+But the parameters called train size is again going to be
+0.0 75 actually, no, that's Ah, that's a, uh I misspoke.
+It should be three zeros here and only two zeros
+above All right, So I'm doing this because I want to get
+the training size to be around 10,000 samples
+and the validation to be 1000 samples I want in 90 uh,
+10 split.
+But the numbers should be bounded between 10,004 train DF
+and close 2000 formality.
+If that's why, uh, these seem very arbitrary or very specific.
+Depends on what frame of mind you're looking at it from.
+But I've chosen these values on.
+You'll see why.
+So now we are going to stratify again.
+Based on this time, the remaining target values.
+So remaining the target Dodd values, all right.
+And since you might be a bit confused about the number
+of rows in the training and valid validation DF, let's go
+ahead and take a look at their shapes.
+It's really simple to do this with pandas D f shape and make
+sure you have typed it exactly as I have.
+And once you're ready, feel free to hit shift, enter
+or the play button here and you'll see that we have
+on the order of close to 10,000 examples
+around 9700 similarly, we have close 2000 validation samples.
+Great, now that we have, uh, now that we have subsided our
+data for fine tuning, let's talk about what our input
+pipeline is going to look like if you've played, uh, close
+attention to the criticisms of Bert and its drawbacks, you
+will have heard that Burt is really expensive to train and is
+slow at inference time.
+While I recognize that a major contributor to that is
+the sheer size of the model, and it's
+100 and nine million plus parameters and other cause is
+the Iot bottleneck, so input output bottlenecks.
+So if you're going back and forth from your disk to the CPU
+to the GPU reading and writing data to GPO memory, this
+can lock up.
+The resource is and it will increase your training
+and inference time.
+It will act as a bottleneck.
+And so that's why we need to be as efficient as we can
+during our pre processing and data loading phase.
+And this is where TensorFlow tze uh TF dot data A p I
+can help us so one of the learning objectives
+for this project is to learn how to use the t f dot uh, data
+a p I for, uh, efficient input pipelines and pre processing
+of your text data for natural language processing tasks.
+So we're gonna be using the, uh, T f.
+That data a p I and I've linked that in the notebook itself,
+So GP use and abuse can radically reduce the time required
+to execute a single training step and achieving peak
+performance requires and efficient input Pipeline
+that delivers data for the next step before the current step
+has finished.
+And the t. F.
+The data AP here helps us to build this flexible
+and efficient input pipeline.
+So during training, many input elements need to be pre
+process right.
+We need to convert it thio this format of token IEDs, input
+mask IEDs and input type ideas so that bird can accepted
+as input.
+And so, since many input elements will have to be processed,
+the TF data AP I offers the TF data data set dot map
+transformation, which applies a user defined function
+to each element of the input data set.
+And because the input elements are independent of one another,
+the pre processing ah step can be paralyzed across multiple
+CPU course.
+And to make this possible, um, the map transformation
+from the T FDR data AP I provides an argument where we
+can specify the level of parallelism that we want during pre
+processing.
+So what we can do is do all the pre processing step
+on the CPU, and that way there's no overhead.
+There's no GP overhead, basically.
+And so to create an input pipeline, you must start
+with a data source, for example, to construct a data set, uh,
+from data in memory, you can use the t f d r A data set
+the TF data that data set from tensor tze method or the T F.
+D data set from tensor slices method and the return data set
+object is a python terrible, which makes it possible
+to consume its elements using a for loop.
+So what we are about to do now is create a, uh, TensorFlow
+that data dot uh, data set object, which is a python Terrible.
+And we're doing this since it will make our input data
+pipeline more efficient.
+So let's, uh, do this for the training data, as well
+as for the validation data.
+And the method that we're gonna use is t f dot data
+and we're going to create a data set object from TensorFlow
+slices, and so it's going to give you one element, uh,
+at a time.
+And what it's going to return to us is, uh, well, that's up
+to us. So as the first value, we want the plain text
+of the question.
+And secondly, we want the target labels, right.
+That's what we want our data set to look like.
+So let's put that in here.
+So from the train, DF we want are question text column
+and we want the values from it.
+So dot values and our second value that we want to return is,
+of course, the corresponding target label.
+So let's type that in train D f dot target Or you can put it
+in this format, anything that you're comfortable with.
+I'm just doing this so that you know, you don't have
+to be constrained to one way of doing it.
+So train DF of target dot values.
+There we go.
+So this creates a T F data set for our training data.
+Similarly, let's do it for the validation data.
+So valid underscore data is going to be.
+Of course, hopefully you're familiar with it by now.
+TF data data set from TensorFlow slices, and this time
+we're going to pass in the valid DF instead, the values
+from the columns of the valid DF data frame.
+So valid iev dot question underscore text don't values.
+And similarly, for the target labels.
+There we go.
+And so so this data set object these data set objects
+that will be returned by using this function is a python
+terrible, which makes it possible to consume it's elements
+using a for loop.
+But before I explain what that is, let's just make a minor
+correction here.
+So what I've done is, uh, misspelled from tensor slices.
+So I selected the wrong option here.
+It should be tensor slices.
+So I hope that wasn't too confusing for you, and you picked
+on on my mistake.
+And either way, I'm sorry.
+So let's just go ahead and make that correction.
+And now let's take a look at the first entry
+within the TensorFlow data set for our training data.
+So since this is the data set, object returned is a python
+in triple.
+We can consume the elements of this object using a for loop.
+So, for example, if we want to take a look at on Lee, um,
+the first element from this data set this is how we do it.
+So for text labels to remember that we're returning, uh,
+the text and the label as, uh, tensor tze off and particular
+data types.
+So this is questions they're gonna be string target is
+probably gonna be in 64 32.
+So for text and label in, let's look at the train data.
+So in train underscore data and the number of elements
+that you want to take a look at is given by the argument
+of this.
+Take function here.
+So we pass, take one, we'll get one pair, return one text
+label pair.
+So let's go ahead and print printed out.
+Let's first look at the text and let's also print the label.
+All right, Make sure you you're all caught up here and you've
+not made any typos.
+And now you can go ahead and run this code cell so you'll see
+that we have just created a TensorFlow data set and it's
+elements look like this.
+So this is the first element in the data set where the first
+value returned is a, uh, tensor containing a string type
+value. So the first question is, why are unhealthy
+relationship so desirable.
+So that's someone.
+That's the question someone asked on Cora.
+And the label assigned to it was zero.
+Which means that this is a sincere or non toxic question.
+All right, so this is what our data set.
+It looks like Great.
+So now that we have created TensorFlow data sets for training
+and evaluation, let's download the pre trained birth model
+from TensorFlow Hub and instance she ate the token Isar.
+That will take care of token izing the text and pre
+processing pre processing it in the next task.
+See you there.
