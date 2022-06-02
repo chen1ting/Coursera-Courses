@@ -21,12 +21,17 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+% Add a column of 1 onto X
+X = [ones(m,1), X];
 
+a1 = sigmoid(X * Theta1');
 
+% Add a column of 1 onto a1
+a1 = [ones(size(a1,1),1), a1];
 
+a2 = sigmoid(a1 * Theta2');
 
-
-
+[val, p] = max(a2, [], 2);
 
 
 % =========================================================================
