@@ -196,4 +196,27 @@ addpath('C:\Users\ychen21\Documents\GitHub\Coursera-Courses\Stanford-CS299-Machi
 
 
 
-% Section 6: vectorization -- omitted: replace for-loops with vectors
+% Section 6: vectorization -- replace for-loops with vectors
+% Hint: Unrolling Parameters for back propagation
+% Assumption: We have a 3 layer neural network with s1=10, s2=11, s3=1 (representing number of nodes in each layer)
+% So, theta1&D1 should be 10x11; theta2&D2 should be 10x11; theta3&D3 should be 1x11;
+D1 = ones(10,11); % D1 is a 61
+theta1 = ones(10,11);
+D2 = ones(10,11).*2;
+theta2 = ones(10,11).*2;
+D3 = ones(1,11).*3;
+theta3 = ones(1,11).*3;
+
+% to unroll them,
+thetaVec = [theta1(:);theta2(:);theta3(:)]; % theta1(:) transform theta1 into a vector (110x1)
+DVec = [D1(:); D2(:); D3(:)];
+% to get the original matrix back:
+theta1 = reshape(thetaVec(1:110), 10, 11);
+theta2 = reshape(thetaVec(111:220), 10, 11);
+theta1 = reshape(thetaVec(221:231), 1, 11);
+% Octave is so cool!
+% Why need parameters unrolling? -- To use fminunc function
+% Function header for costFunction:
+function [jval, gradientVec] = costFunction(thetaVec);
+fminunc(@costFunction, initialTheta, options);
+
