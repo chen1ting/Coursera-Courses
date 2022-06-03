@@ -220,3 +220,23 @@ theta1 = reshape(thetaVec(221:231), 1, 11);
 function [jval, gradientVec] = costFunction(thetaVec);
 fminunc(@costFunction, initialTheta, options);
 
+
+% Gradient Checking in Back Propogation: making sure the codes are correct
+epsilon = 1e-4;
+for i = 1:n,
+  thetaPlus = theta;
+  thetaPlus(i) += epsilon;
+  thetaMinus = theta;
+  thetaMinus(i) -= epsilon;
+  gradApprox(i) = (J(thetaPlus) - J(thetaMinus))/(2*epsilon)
+end;
+
+
+% Random Initialization in Back Propogation: cannot use same initial values of theta
+% Otherwise the weight & bias & gradient would be all the same. Cannot.
+% If the dimensions of Theta1 is 10x11, Theta2 is 10x11 and Theta3 is 1x11.
+
+Theta1 = rand(10,11) * (2 * INIT_EPSILON) - INIT_EPSILON;
+Theta2 = rand(10,11) * (2 * INIT_EPSILON) - INIT_EPSILON;
+Theta3 = rand(1,11) * (2 * INIT_EPSILON) - INIT_EPSILON;
+

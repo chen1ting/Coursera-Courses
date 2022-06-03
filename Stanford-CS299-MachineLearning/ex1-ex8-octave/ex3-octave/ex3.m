@@ -40,7 +40,6 @@ rand_indices = randperm(m);
 sel = X(rand_indices(1:100), :);
 
 displayData(sel);
-
 fprintf('Program paused. Press enter to continue.\n');
 pause;
 
@@ -58,6 +57,8 @@ fprintf('\nTesting lrCostFunction() with regularization');
 theta_t = [-2; -1; 1; 2];
 X_t = [ones(5,1) reshape(1:15,5,3)/10];
 y_t = ([1;0;1;0;1] >= 0.5);
+size(X_t)
+size(y_t)
 lambda_t = 3;
 [J grad] = lrCostFunction(theta_t, X_t, y_t, lambda_t);
 
